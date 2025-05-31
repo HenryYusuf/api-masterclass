@@ -25,6 +25,10 @@ class UserResource extends JsonResource
                     'createdAt' => $this->created_at,
                     'updatedAt' => $this->updated_at,
                 ]),
+            ],
+            'include' => TicketResource::collection($this->whenLoaded('tickets')),
+            'links' => [
+                'self' => route('users.show', ['user' => $this->id])
             ]
         ];
     }
