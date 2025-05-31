@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 // tickets
 // users
 
-Route::apiResource('tickets', TicketController::class);
+Route::apiResource('tickets', TicketController::class)->middleware('auth:sanctum');
 
 Route::get('/user', function (Request $request) {
     return $request->user();
