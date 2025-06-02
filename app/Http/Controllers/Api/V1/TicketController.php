@@ -34,14 +34,7 @@ class TicketController extends ApiController
             ]);
         }
 
-        $model = [
-            'title' => $request->input('data.attributes.title'),
-            'description' => $request->input('data.attributes.description'),
-            'status' => $request->input('data.attributes.status'),
-            'user_id' => $request->input('data.relationships.author.data.id'),
-        ];
-
-        return new TicketResource(Ticket::create($model));
+        return new TicketResource($request->mappedAttributes());
     }
 
     /**
@@ -68,6 +61,15 @@ class TicketController extends ApiController
     public function update(UpdateTicketRequest $request, $ticket_id)
     {
         // PATCH
+        try {
+            $ticket = Ticket::findOrFail($ticket_id);
+
+            $ticket->update($request->mappedAttributes());
+
+            return new TicketResource($ticket);
+        } catch (ModelNotFoundException $exception) {
+            return $this->error('Ticket not found', 404);
+        }
     }
 
     public function replace(ReplaceTicketRequest $request, $ticket_id)
@@ -76,14 +78,7 @@ class TicketController extends ApiController
         try {
             $ticket = Ticket::findOrFail($ticket_id);
 
-            $model = [
-                'title' => $request->input('data.attributes.title'),
-                'description' => $request->input('data.attributes.description'),
-                'status' => $request->input('data.attributes.status'),
-                'user_id' => $request->input('data.relationships.author.data.id'),
-            ];
-
-            $ticket->update($model);
+            $ticket->update($request->mappedAttributes());
 
             return new TicketResource($ticket);
         } catch (ModelNotFoundException $exception) {
