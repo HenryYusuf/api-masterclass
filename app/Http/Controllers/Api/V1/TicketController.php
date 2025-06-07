@@ -97,6 +97,8 @@ class TicketController extends ApiController
             return new TicketResource($ticket);
         } catch (ModelNotFoundException $exception) {
             return $this->error('Ticket not found', 404);
+        } catch (AuthorizationException $authorizationException) {
+            return $this->error('You are not authorized to replace this resource', 401);
         }
     }
 

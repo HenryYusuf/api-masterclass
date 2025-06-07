@@ -36,6 +36,8 @@ class TicketPolicy
     {
         if ($user->tokenCan(Abilities::ReplaceTicket)) {
             return true;
+        } else if ($user->tokenCan(Abilities::ReplaceOwnTicket)) {
+            return $user->id === $ticket->user_id;
         }
 
         return false;
