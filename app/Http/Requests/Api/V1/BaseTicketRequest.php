@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Permissions\V1\Abilities;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BaseTicketRequest extends FormRequest
